@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+    <input type="text" value="" id="input" />
+    <div class="ritz grid-container" dir="ltr">
+        <table class="waffle no-grid" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th id="0C0" style="width:45px;" class="column-headers-background"></th>
+                    <th id="0C1" style="width:35px;" class="column-headers-background"></th>
+                    <th id="0C2" style="width:250px;" class="column-headers-background"></th>
+                    <th id="0C3" style="width:89px;" class="column-headers-background"></th>
+                    <th id="0C4" style="width:170px;" class="column-headers-background"></th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                <tr style="height: 36px">
+                    <td class="s0" dir="ltr" colspan="5" id="title"></td>
+                </tr>
+                <tr style="height: 23px">
+                    <td class="s1" dir="ltr">Rank</td>
+                    <td class="s1"></td>
+                    <td class="s2" dir="ltr">Name</td>
+                    <td class="s1" dir="ltr">Result [sec]</td>
+                    <td class="s1" dir="ltr">Source</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" onclick="start();">start</button>
+    <button type="button" onclick="download();">download</button>
+
+
+    <script>
+        window.onload = function () { alert("ready") }
+        ranking_idlist = []
+
+        function start() {
+            setTimeout(function () {
+                const box = document.getElementById("input");
+                const input = eval(box.value);
+                box.remove();
+                main(input);
+            }, 300);
+        }
+
+        function getNowDateWithString() {
+            var dt = new Date();
+            var y = dt.getFullYear();
+            var m = ("00" + (dt.getMonth() + 1)).slice(-2);
+            var d = ("00" + dt.getDate()).slice(-2);
+            var result = y + "/" + m + "/" + d;
+            return result;
+        }
+
+        function toBase64Url(url, tag) {
+            const p = new Promise((resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.onloadend = function() {
+                    if(xhr.status == 200) {
+                        var reader = new FileReader();
+                        reader.onloadend = function () {
+                            tag.src = reader.result;
+                            resolve();
+                        }
+                        reader.readAsDataURL(xhr.response);
+                    } else {
+                        resolve();
+                    }
+                }
+                xhr.open('GET', url);
+                xhr.responseType = 'blob';
+                xhr.send();
+            });
+            return p;
+        }
+
+        function main(list) {
+            
+            for (var i = 0; i < list.length; i++) {
+                let dom = document.createElement('div');
+                dom.innerHTML = list[i][3];
+                let source_str = dom.innerText;
+                if (source_str === "") source_str = undefined;
+                list[i][3] = source_str;
+            }
+            console.log(list)
+
+            document.getElementById("title").innerText = "Today's top 30 (" + getNowDateWithString() + ")";
+
+            const client = ["Twitter for iPhone",
+                "Twitter for Android",
+                "Twitter Web Client",
+                "TweetDeck",
+                "TweetDeck Web App",
+                "Twitter for iPad",
+                "Twitter for Mac",
+                "Twitter Web App",
+                "Twitter Lite",
+                "Mobile Web (M2)",
+                "Twitter for Windows",
+                "Janetter",
+                "Janetter for Android",
+                "Janetter Pro for iPhone",
+                "Janetter for Mac",
+                "Janetter Pro for Android",
+                "Tweetbot for iΟS",
+                "Tweetbot for iOS",
+                "Tweetbot for Mac",
+                "twitcle plus",
+                "ツイタマ",
+                "ツイタマ for Android",
+                "ツイタマ+ for Android",
+                "Sobacha",
+                "SobaCha",
+                "Metacha",
+                "MetaCha",
+                "MateCha",
+                "ツイッターするやつ",
+                "ツイッターするやつγ",
+                "ツイッターするやつγ pro",
+                "jigtwi",
+                "feather for iOS",
+                "hamoooooon",
+                "Hel2um on iOS",
+                "Hel1um Pro on iOS",
+                "Hel1um on iOS",
+                "undefined"
+            ]
+
+            let queue = [];
+
+            let tbody = document.getElementById("table");
+            let rank = 0;
+            let counter = -1;
+
+            for (var i = 0; i < list.length; i++) {
+                if (rank < 30) add_tr(i);
+                else {
+                    if (list[i][2] !== list[i - 1][2]) rank = i;
+                    if (list[i][2] === "0.334") add_tr(i);
+                    else if (rank === 333) add_tr(i);
+                }
+            }
+
+            function add_tr(i) {
+                counter = counter * -1;
+                let row_style = "s" + String(counter + 4);
+                let tr = document.createElement('tr');
+                tr.setAttribute("style", "height: 29px");
+
+                let beforetime = (i === 0) ? list[i][2] : list[i - 1][2];
+                if (list[i][2] !== beforetime) rank = i;
+
+                if (rank >= 30 && list[i][2] !== "0.334" && rank !== 333) {
+                    counter = counter * -1;
+                    return;
+                }
+
+                let rank_str;
+                if (rank === 0) rank_str = "🏆";
+                else if (rank === 1) rank_str = "🥈";
+                else if (rank === 2) rank_str = "🥉";
+                else rank_str = String(rank + 1);
+                list[i].push(rank + 1)
+
+                let rank_td = document.createElement('td');
+                rank_td.setAttribute("class", row_style + " rank");
+                rank_td.innerText = rank_str;
+                tr.appendChild(rank_td);
+
+                let img_td = document.createElement('td');
+                img_td.setAttribute("class", row_style + " img");
+
+                let img_div = document.createElement('div');
+                img_div.setAttribute("style", "width:29px;height:29px;");
+                let img_tag = document.createElement('img');
+                img_tag.setAttribute("style", "width:inherit;height:inherit;object-fit:scale-down;object-position:left bottom;");
+                queue.push(toBase64Url(list[i][0], img_tag));
+                img_div.appendChild(img_tag);
+                img_td.appendChild(img_div);
+                tr.appendChild(img_td);
+
+                if (list[i][1].charAt(0) === "'") list[i][1] = "'" + list[i][1];
+                let name_td = document.createElement('td');
+                name_td.setAttribute("class", row_style + " name");
+                name_td.innerText = list[i][1];
+                if (list[i][1] === '︎︎') name_td.innerText = list[i][5];
+                tr.appendChild(name_td);
+
+                let time_td = document.createElement('td');
+                if (list[i][2] === "0.000") time_td.setAttribute("class", row_style + " s8 time");
+                else if (list[i][2] === "0.334") time_td.setAttribute("class", row_style + " s9 time");
+                else if (Number(list[i][2]) < 0.01) time_td.setAttribute("class", row_style + " s7 time");
+                else time_td.setAttribute("class", row_style + " s6 time");
+                time_td.innerText = list[i][2];
+                tr.appendChild(time_td);
+
+                let source_td = document.createElement('td');
+                source_td.setAttribute("class", row_style + " source");
+                source_td.innerText = list[i][3];
+                if (!client.includes(list[i][3])) source_td.style = "color: #a9a9a9";
+                tr.appendChild(source_td);
+
+                tbody.appendChild(tr);
+            }
+
+            function make_img() {
+                html2canvas(document.querySelector("#table"), { scale: 3 }).then(canvas => {
+                    let url = canvas.toDataURL("image/png");
+                    window.res = url.split(",")[1];
+                    alert("next")
+                    senddata()
+                });
+            }
+
+            const promise = Promise.all(queue);
+            promise.then((e) => make_img());
+
+            function senddata() {
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', decodeURIComponent(window.location.href.replace(window.location.origin,"").split("?")[1]));
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send(JSON.stringify({"data": list}));
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        alert("conplete")
+                    }
+                }
+
+            }
+        }
+        
+        function download() {
+            html2canvas(document.querySelector('#table'), { scale: 3 }).then((canvas) => {
+                let link = document.createElement('a');
+                link.href = canvas.toDataURL();
+                link.download = "export_image.png"
+                link.click();
+            })
+        }
+    </script>
+</body>
+
+</html>
