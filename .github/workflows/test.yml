@@ -1,0 +1,59 @@
+name: test
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+          
+      - name: Install Package
+        id: set
+        run: |
+          sudo languagesetup -langspec ja
+          sudo systemsetup -settimezone Asia/Tokyo
+          sudo systemsetup -getusingnetworktime
+          sudo systemsetup -setusingnetworktime on
+          pip install chromedriver-binary-auto
+          pip install selenium-wire
+          pip install selenium
+          pip install requests
+          pip install requests_oauthlib
+          pip install git+https://github.com/abshrimp/unofficial_twitter_client.git
+          pip install blinker==1.7.0  
+      
+ 
+
+      - name: Run Python
+        id: python
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          ANDROID_CONSUMER_KEY: ${{ secrets.ANDROID_CONSUMER_KEY }}
+          ANDROID_CONSUMER_SECRET: ${{ secrets.ANDROID_CONSUMER_SECRET }}
+          KDT: ${{ secrets.KDT }}
+          X_TWITTER_CLIENT_ADID: ${{ secrets.X_TWITTER_CLIENT_ADID }}
+          X_CLIENT_UUID: ${{ secrets.X_CLIENT_UUID }}
+          X_TWITTER_CLIENT_DEVICEID: ${{ secrets.X_TWITTER_CLIENT_DEVICEID }}
+          PHP_URL: ${{ secrets.PHP_URL }}
+          MAIN_TOKENS: ${{ secrets.MAIN_TOKENS }}
+          REP_TOKENS: ${{ secrets.REP_TOKENS }}
+          HTML_URL: ${{ secrets.HTML_URL }}
+          HTML_URL2: ${{ secrets.HTML_URL2 }}
+          TZ: "Asia/Tokyo"
+        run: python main.py test
+
+    
+
+        

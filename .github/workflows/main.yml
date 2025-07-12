@@ -1,0 +1,94 @@
+name: 334Ranker
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        id: set
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+        continue-on-error: true
+        timeout-minutes: 1
+
+                
+      - name: Error handling
+        if: ${{ steps.set.outcome == 'failure' }}
+        run: |
+          echo "Error handling"
+          curl -X POST https://api.github.com/repos/abshrimp/334Ranker/dispatches \
+               -H 'authorization: Bearer '${{ secrets.KEY }} \
+               --data '{"event_type": "Error handling"}'
+          exit 1
+
+          
+      - name: Install Package
+        id: install
+        continue-on-error: true
+        run: |
+          sudo languagesetup -langspec ja
+          sudo systemsetup -settimezone Asia/Tokyo
+          sudo systemsetup -getusingnetworktime
+          sudo systemsetup -setusingnetworktime on
+          pip install chromedriver-binary-auto
+          pip install selenium-wire
+          pip install selenium
+          pip install requests
+          pip install requests_oauthlib
+          pip install git+https://github.com/abshrimp/unofficial_twitter_client.git
+          pip install blinker==1.7.0
+      
+      
+      - name: Error handling
+        if: ${{ steps.install.outcome == 'failure' }}
+        run: |
+          echo "Error handling"
+          curl -X POST https://api.github.com/repos/abshrimp/334Ranker/dispatches \
+               -H 'authorization: Bearer '${{ secrets.KEY }} \
+               --data '{"event_type": "Error handling"}'
+          exit 1
+ 
+
+      - name: Run Python
+        id: python
+        continue-on-error: true
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          ANDROID_CONSUMER_KEY: ${{ secrets.ANDROID_CONSUMER_KEY }}
+          ANDROID_CONSUMER_SECRET: ${{ secrets.ANDROID_CONSUMER_SECRET }}
+          KDT: ${{ secrets.KDT }}
+          X_TWITTER_CLIENT_ADID: ${{ secrets.X_TWITTER_CLIENT_ADID }}
+          X_CLIENT_UUID: ${{ secrets.X_CLIENT_UUID }}
+          X_TWITTER_CLIENT_DEVICEID: ${{ secrets.X_TWITTER_CLIENT_DEVICEID }}
+          PHP_URL: ${{ secrets.PHP_URL }}
+          MAIN_TOKENS: ${{ secrets.MAIN_TOKENS }}
+          REP_TOKENS: ${{ secrets.REP_TOKENS }}
+          HTML_URL: ${{ secrets.HTML_URL }}
+          HTML_URL2: ${{ secrets.HTML_URL2 }}
+          TZ: "Asia/Tokyo"
+        run: python main.py
+
+      
+      - name: output
+        run: echo ${{ github.event.client_payload.err }}
+        
+      - name: Error handling
+        if: ${{ github.event.client_payload.err != 'aaaa' && steps.python.outcome == 'failure' }}
+        run: |
+          echo "Error handling"
+          curl -X POST https://api.github.com/repos/abshrimp/334Ranker/dispatches \
+               -H 'authorization: Bearer '${{ secrets.KEY }} \
+               --data '{"event_type": "Error handling", "client_payload":{"err":"${{ github.event.client_payload.err }}a"}}'
+          exit 1

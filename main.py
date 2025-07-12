@@ -488,7 +488,6 @@ def make_ranking(results_dict_arr, _driver):
 
 
     #生データを扱いやすい形に変換
-    print("a")
     global records_rank, today_result, today_joined, prepare_flag
     now = datetime.datetime.now()
     today_str = now.date().strftime('%Y-%m-%d')
@@ -638,8 +637,6 @@ def get334(oauth_token, token_secret, search_only, func):
     def get_timeline(cursor = None):
         nonlocal out
         print("GET334 get_timeline  search_only:", search_only)
-        final()
-        return
         try:
             data = web.latest_timeline_web(oauth_token, token_secret, cursor)
             entries = data['data']['home']['home_timeline_urt']['instructions'][0]['entries']
@@ -780,7 +777,8 @@ def notice():
             Alert(_driver).accept()
         except Exception as e:
             traceback.print_exc()
-            time.sleep(2)
+            _driver.quit()
+            time.sleep(5)
         else:
             main334(_driver)
             break

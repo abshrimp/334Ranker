@@ -1,2 +1,6 @@
 .env
 .DS_Store
+
+_research.py
+_derank.py
+_resave.py
