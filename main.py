@@ -63,7 +63,7 @@ def request_php(url, data=None):
                 response = requests.get(PHP_URL + url + ".php")
                 return response.json()
         except Exception as e:
-            print(f"request_php {attempt + 1} failed: {e}")
+            print(f"request_php {attempt + 1} failed")
             if attempt < 5 - 1:
                 print(f"Retrying in {60} seconds...")
                 time.sleep(60)
