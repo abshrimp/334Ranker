@@ -212,7 +212,7 @@ def receive(data):
             text = text.replace("@" + mention["screen_name"].lower(), "")
         
         if any(x in text for x in ["ふぉろー", "フォロー", "follow", "ふぉろば", "フォロバ"]):
-            if any(x in text for x in ["してもいいですか", "しても大丈夫ですか"]):  # エロスパムを排除
+            if any(x in text for x in ["してもいいですか", "しても大丈夫ですか", "させていただきました"]):  # エロスパムを排除
                 return False
             
             try:
