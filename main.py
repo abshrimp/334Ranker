@@ -56,20 +56,29 @@ def TweetIdTime(id):
 def request_php(url, data=None):
     for attempt in range(5):
         try:
-            if data != None:
-                response = requests.post(PHP_URL + url + ".php", headers={"Content-Type": "application/json"}, data=json.dumps(data))
+            if data is not None:
+                response = requests.post(
+                    PHP_URL + url + ".php",
+                    headers={"Content-Type": "application/json"},
+                    data=json.dumps(data)
+                )
                 return response
             else:
                 response = requests.get(PHP_URL + url + ".php")
                 return response.json()
+
         except Exception as e:
             print(f"request_php {attempt + 1} failed")
-            if attempt < 5 - 1:
-                print(f"Retrying in {60} seconds...")
+            print(f"Error: {e}")          # 例外メッセージを表示
+            print(f"Detail: {repr(e)}")   # より詳細な形式で表示
+
+            if attempt < 4:
+                print("Retrying in 60 seconds...")
                 time.sleep(60)
             else:
                 print("All php requests failed.")
                 return None
+
 
 
 account_switch = 0  # 返信用アカウント振り分け用カウンター
