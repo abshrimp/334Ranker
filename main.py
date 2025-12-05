@@ -64,7 +64,11 @@ def request_php(url, data=None):
                 )
                 return response
             else:
-                response = requests.get(PHP_URL + url + ".php")
+                headers = {
+                    "Accept-Encoding": "gzip, deflate"
+                }
+                response = requests.get(PHP_URL + url + ".php", headers=headers)
+
                 return response.json()
 
         except Exception as e:
