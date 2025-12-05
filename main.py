@@ -73,8 +73,6 @@ def request_php(url, data=None):
 
         except Exception as e:
             print(f"request_php {attempt + 1} failed")
-            print(f"Error: {e}")          # 例外メッセージを表示
-            print(f"Detail: {repr(e)}")   # より詳細な形式で表示
 
             if attempt < 4:
                 print("Retrying in 60 seconds...")
