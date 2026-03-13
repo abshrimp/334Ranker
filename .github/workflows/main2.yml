@@ -1,7 +1,7 @@
-name: 334Ranker
+name: 334Ranker sub
 
 on:
-  # repository_dispatch:
+  repository_dispatch:
   workflow_dispatch:
 
 
@@ -78,7 +78,7 @@ jobs:
           HTML_URL: ${{ secrets.HTML_URL }}
           HTML_URL2: ${{ secrets.HTML_URL2 }}
           TZ: "Asia/Tokyo"
-        run: python main.py
+        run: python main2.py
 
       
       - name: output

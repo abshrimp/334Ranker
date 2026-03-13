@@ -1,8 +1,12 @@
 .env
 .DS_Store
+.claude/
+*.sql
 
 _research.py
+_research2.py
 _derank.py
 _resave.py
+_month.py
 
 server2
