@@ -481,7 +481,7 @@ def get334(oauth_token, token_secret, search_only, func):
 
 
     get_time = time2 + datetime.timedelta(seconds=1)
-    while get_now() < get_time: time.sleep(0.01)
+    while datetime.datetime.now() < get_time: time.sleep(0.01)
     print("GET334 START  search_only:", search_only)
     if search_only:
         threading.Thread(target = get_search).start()
@@ -515,7 +515,7 @@ def notice():
     global today_result, prepare_flag
     today = get_now().date()
     notice_time = datetime.datetime.combine(today, datetime.time(TIME334[0], TIME334[1])) - datetime.timedelta(minutes=2)
-    while get_now() < notice_time: time.sleep(5)
+    while datetime.datetime.now() < notice_time: time.sleep(5)
     today_result = {}
     prepare_flag = True
     print("NOTICE :")
