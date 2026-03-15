@@ -364,7 +364,7 @@ def get334(oauth_token, token_secret, search_only, func):
     def final():
         nonlocal count, out2, end_flag
         count += 1
-        if count >= (1 if search_only else 3):
+        if count >= (2 if search_only else 3):
             out.sort(key=lambda x: x['index'])
             ids = []
             for item in out:
@@ -484,6 +484,8 @@ def get334(oauth_token, token_secret, search_only, func):
     while datetime.datetime.now() < get_time: time.sleep(0.01)
     print("GET334 START  search_only:", search_only)
     if search_only:
+        threading.Thread(target = get_search).start()
+        time.sleep(3)
         threading.Thread(target = get_search).start()
     else:
         threading.Thread(target = get_timeline).start()
