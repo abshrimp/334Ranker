@@ -444,6 +444,8 @@ def make_ranking(results_dict_arr, _driver):
 
 
 def fetch_334_tweets(target_date):
+    return []
+    
     start_time = f"{target_date}T18:33:59Z"
     end_time = f"{target_date}T18:34:01Z"
     
