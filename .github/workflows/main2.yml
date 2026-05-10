@@ -40,7 +40,6 @@ jobs:
           sudo systemsetup -getusingnetworktime
           sudo systemsetup -setusingnetworktime on
           pip install chromedriver-binary-auto
-          pip install selenium-wire
           pip install selenium
           pip install requests
           pip install requests_oauthlib

@@ -21,7 +21,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from seleniumwire import webdriver
+from selenium import webdriver
 
 from unofficial_twitter_client import android, web, oauth
 
@@ -53,7 +53,7 @@ for account in rep_accounts2:
     rep_accounts.append(account.split("$"))
 
 def get_now():
-    return datetime.datetime.now() - datetime.timedelta(hours=TIME334[0], minutes=TIME334[1]) + datetime.timedelta(minutes=30)
+    return datetime.datetime.now() - datetime.timedelta(hours=TIME334[0], minutes=TIME334[1]) + datetime.timedelta(minutes=30) - datetime.timedelta(days=0)
 
 def TweetIdTime(id):
     return datetime.datetime.fromtimestamp(((id >> 22) + 1288834974657) / 1000.0)
@@ -718,10 +718,10 @@ def notice():
     today_result = {}
     prepare_flag = True
     print("NOTICE :")
-    try:
-        oauth.tweet_by_oauth(f"{KEYWORD}観測中 ({today.strftime('%Y/%m/%d')})")
-    except Exception as e:
-        traceback.print_exc()
+    # try:
+    #     oauth.tweet_by_oauth(f"{KEYWORD}観測中 ({today.strftime('%Y/%m/%d')})")
+    # except Exception as e:
+    #     traceback.print_exc()
 
     _driver = {}
     
