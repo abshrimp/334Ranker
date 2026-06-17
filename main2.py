@@ -53,7 +53,7 @@ for account in rep_accounts2:
     rep_accounts.append(account.split("$"))
 
 def get_now():
-    return datetime.datetime.now() - datetime.timedelta(hours=TIME334[0], minutes=TIME334[1]) + datetime.timedelta(minutes=30) - datetime.timedelta(days=3)
+    return datetime.datetime.now() - datetime.timedelta(hours=TIME334[0], minutes=TIME334[1]) + datetime.timedelta(minutes=30) - datetime.timedelta(days=2)
 
 def TweetIdTime(id):
     return datetime.datetime.fromtimestamp(((id >> 22) + 1288834974657) / 1000.0)
